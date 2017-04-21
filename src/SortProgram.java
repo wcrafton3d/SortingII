@@ -1,56 +1,77 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class SortProgram {
 
-    private Scanner myScanner = new Scanner(System.in);
+    private ArrayList<String> myList = new ArrayList<>();
 
     public void startProgram() {
-        ArrayList myList = new ArrayList();
-        addToList(myList);
-        System.out.println(myList+"\n");
-        do {
-            printBitch("[ADD]\n[REMOVE]\n");
-            String menuInput = myScanner.next();
-            if (menuInput.equals("ADD")) {
-                printBitch("What would you like to add, bitch?");
-                String item = myScanner.next();
-                myList.add(item);
-                printBitch(myList);
-            } else if (menuInput.equals("REMOVE")) {
-                printBitch("What would you like to remove, bitch?");
-                String item = myScanner.next();
-                int idx = 0;
-                while (idx < myList.size()) {
-                    if (myList.get(idx) == item) {
-                        myList.remove(idx);
-                    } else {
-                        ++idx;
-                    }
-                }
-                printBitch(myList);
-            } else {
-                break;
-            }
-        }while(true);
+        printBitch("\nHello, bitch, gimme something to list!\n");
+        addListItem();
+        displayMenu();
     }
 
-    private void addToList(ArrayList myList) {
-        String testLoop;
-        do{
-            printBitch("Hello, bitch, gimme something to list!\n");
-            String item = myScanner.next();
-            myList.add(item);
-            printBitch("Anything else, bitch? (y/n)\n");
-            testLoop = myScanner.next();
-        }while(testLoop.equals("y"));
+    private void displayMenu() {
+        System.out.println("\nYour list: " + myList);
+        printBitch("\n[A]DD\n[R]EMOVE\n[S]ORT\n[E]XIT");
+        menuSelection(getUserInput());
+    }
+
+    private void menuSelection(String input) {
+        switch (firstLetter(input)) {
+            case "a":
+                addListItem();
+                displayMenu();
+                break;
+            case "r":
+                removeListItem();
+                displayMenu();
+                break;
+            case "s":
+                Collections.sort(myList);
+                displayMenu();
+                break;
+            case "e":
+                endProgram();
+                break;
+            default:
+                printBitch("Invalid selection, try again, bitch.");
+                displayMenu();
+                break;
+        }
+    }
+
+    private void addListItem() {
+        printBitch("\nWhat would you like to add, bitch?");
+        myList.add(getUserInput());
+    }
+
+    private void removeListItem() {
+        printBitch("\nWhat would you like to remove, bitch?");
+        String item = getUserInput();
+
+        for (int i = 0; i < myList.size(); i++) {
+            if (myList.get(i).equals(item))
+                myList.remove(i);
+        }
+    }
+
+    private String getUserInput() {
+        final Scanner myScanner = new Scanner(System.in);
+        System.out.print("> ");
+        return myScanner.next().toLowerCase();
+    }
+
+    private String firstLetter(String userInput) {
+        return String.valueOf(userInput.charAt(0)).toLowerCase();
     }
 
     private void printBitch(String source) {
-        System.out.println(source+", bitch");
+        System.out.println(source);
     }
 
-    private void printBitch(ArrayList source) {
-        System.out.println(source+", bitch");
+    private void endProgram() {
+        printBitch("\nBye, bitch!");
     }
 }
